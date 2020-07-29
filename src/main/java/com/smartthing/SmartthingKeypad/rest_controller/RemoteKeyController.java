@@ -1,8 +1,7 @@
-package rest_controller;
+package com.smartthing.SmartthingKeypad.rest_controller;
 
-import model.RemoteKey;
+import com.smartthing.SmartthingKeypad.model.RemoteKey;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
