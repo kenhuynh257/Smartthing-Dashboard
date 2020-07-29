@@ -14,7 +14,15 @@ class App extends React.Component {
     }
 
     handleSubmit(event) {
-        alert('A name was submitted: ' + this.state.value);
+        alert('A key was submitted: ' + this.state.value);
+        const axios = require('axios');
+        axios.post('/RemoteKey/',{
+            key:this.state.value
+        }).then((response) => {
+            console.log(response);
+        }, (error) => {
+            console.log(error);
+        });
         event.preventDefault();
     }
 
