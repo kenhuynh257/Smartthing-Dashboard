@@ -1,10 +1,23 @@
 import React from 'react';
+import axios from 'axios';
 
-class Boards extends React.Component{
+export default class Boards extends React.Component {
+    state = {
+        key: [],
+    }
+
+    componentDidMount() {
+        axios.get('/RemoteKey/')
+            .then(res => {
+                this.setState({key: res.data});
+
+            })
+    }
+
     render() {
-        return <h1>Hello</h1>;
+        let theKey = this.state.key.toString();
+        return <h1>{theKey}</h1>;
 
     }
 }
 
-export default Boards;
