@@ -1,5 +1,6 @@
 package com.smartthing.SmartthingKeypad.rest_controller;
 
+
 import com.smartthing.SmartthingKeypad.model.RemoteKey;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,8 @@ public class RemoteKeyController {
     @PostMapping(path = "/")
     @ResponseStatus(HttpStatus.OK)
     public String setRemoteKey(@RequestBody String key) {
-        RemoteKey.key = key;
+        RemoteKey.key = key.replaceAll(".$", "");
+        System.out.println(RemoteKey.key);
         return RemoteKey.key;
     }
 }
