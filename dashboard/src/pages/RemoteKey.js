@@ -1,8 +1,8 @@
 import React from 'react';
-import App from "./App";
 import Boards from "./Boards";
+import axios from 'axios';
 
-class RemoteKey extends React.Component{
+export default class RemoteKey extends React.Component {
     constructor(props) {
         super(props);
         this.state = {value: ''};
@@ -15,12 +15,10 @@ class RemoteKey extends React.Component{
     }
 
     handleSubmit(event) {
+        event.preventDefault();
 
-        const axios = require('axios');
-
-        axios.post('/RemoteKey/',{
-            key:this.state.value
-        }).then((response) => {
+        axios.post('/RemoteKey/', this.state.value
+        ).then((response) => {
             console.log(response);
         }, (error) => {
             console.log(error);
@@ -28,8 +26,7 @@ class RemoteKey extends React.Component{
 
         alert('A key was submitted: ' + this.state.value);
 
-        event.preventDefault();
-        window.location.href=<Boards />;
+        window.location.href = <Boards/>;
     }
 
     render() {
@@ -46,4 +43,3 @@ class RemoteKey extends React.Component{
         );
     }
 }
-export default RemoteKey;
