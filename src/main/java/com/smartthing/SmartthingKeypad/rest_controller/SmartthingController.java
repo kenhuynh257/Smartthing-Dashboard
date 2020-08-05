@@ -13,7 +13,6 @@ import java.io.IOException;
 @RestController
 @RequestMapping(path = "/GetData")
 public class SmartthingController {
-    String key = "Bearer " + RemoteKey.key;
     OkHttpClient client = new OkHttpClient();
 
     @GetMapping(path = "/")
@@ -22,10 +21,10 @@ public class SmartthingController {
         Request request = new Request.Builder()
                 .url("https://api.smartthings.com/v1/devices")
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer 8b6c98e5-3258-4023-b59a-9839f1d86ecc")
+                .addHeader("Authorization", RemoteKey.key)
                 .build();
-        try (Response response = client.newCall(request).execute()) {
 
+        try (Response response = client.newCall(request).execute()) {
             String resStr = response.body().string();
             System.out.println(resStr);
             return resStr;
