@@ -7,17 +7,30 @@ export default class Boards extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('/RemoteKey/')
+        axios.get('/GetData/')
             .then(res => {
-                this.setState({key: res.data});
+                console.log(res.data.items);
+                this.setState({key: res.data.items});
 
             })
     }
 
     render() {
-        let theKey = this.state.key.toString();
-        return <h1>{theKey}</h1>;
+        let data = this.state.key;
+        console.log(data);
+        return (
+            <ul>
+                {data.map(s=>(
+                    <div className="data" key={s.deviceId}>
+                        {s.label}
+                    </div>
+                ))}
+            </ul>
+
+
+       );
 
     }
 }
 
+//
