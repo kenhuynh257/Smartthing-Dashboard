@@ -17,7 +17,7 @@ public class RemoteKeyController {
     @PostMapping(path = "/")
     @ResponseStatus(HttpStatus.OK)
     public String setRemoteKey(@RequestBody String key) {
-        RemoteKey.key = key.replaceAll(".$", "");
+        RemoteKey.key = "Bearer " + key.replaceAll(".$", "");
         System.out.println(RemoteKey.key);
         return RemoteKey.key;
     }
