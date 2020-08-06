@@ -3,33 +3,42 @@ import axios from 'axios';
 
 export default class Boards extends React.Component {
     state = {
-        key: [],
+        device: [],
     }
 
     componentDidMount() {
-        axios.get('/GetData/')
+        axios.get('/GetData/GetAllDevices')
             .then(res => {
                 console.log(res.data.items);
-                this.setState({key: res.data.items});
+                this.setState({device: res.data.items});
 
             })
     }
 
     render() {
-        let data = this.state.key;
+        let data = this.state.device;
         console.log(data);
         return (
-            <ul>
+            <div>
                 {data.map(s=>(
-                    <div className="data" key={s.deviceId}>
-                        {s.label}
+                    //if s.label is the thing I want
+                    <div className="card-deck" key={s.deviceId}>
+                        {this.renderCard(s)}
+
                     </div>
                 ))}
-            </ul>
+            </div>
 
 
        );
 
+    }
+
+    renderCard(s) {
+        return <div class="card p-2">
+            <h4 className="card-title">{s.label}</h4>
+
+        </div>;
     }
 }
 
