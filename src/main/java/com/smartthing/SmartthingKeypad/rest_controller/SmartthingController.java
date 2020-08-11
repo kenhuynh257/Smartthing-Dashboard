@@ -1,11 +1,11 @@
 package com.smartthing.SmartthingKeypad.rest_controller;
 
+import com.smartthing.SmartthingKeypad.model.JsonGenerator;
 import com.smartthing.SmartthingKeypad.model.RemoteKey;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +18,7 @@ public class SmartthingController {
 
     @GetMapping(path = "/GetAllDevices")
     public String getAllDevices() throws IOException {
-
+        JsonGenerator json = new JsonGenerator();
         Request request = new Request.Builder()
                 .url("https://api.smartthings.com/v1/devices")
                 .method("GET", null)
@@ -26,31 +26,12 @@ public class SmartthingController {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            String resStr = response.body().string();
+
+            String resStr = json.constructJson(response.body().string());
             System.out.println(resStr);
             return resStr;
         }
     }
 
-    @GetMapping(path = "/GetCapabilityStatus/{deviceID}/{capabilityID}")
-    public String getCapabilityStatus(@PathVariable String deviceID, @PathVariable String capabilityID) throws IOException {
-        String url = "https://api.smartthings.com/v1/devices/"
-                + deviceID
-                + "/components/main/capabilities/"
-                + capabilityID
-                + "/status";
-
-        Request request = new Request.Builder()
-                .url(url)
-                .method("GET", null)
-                .addHeader("Authorization", RemoteKey.key)
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            String resStr = response.body().string();
-            return resStr;
-        }
-
-    }
 
 }
