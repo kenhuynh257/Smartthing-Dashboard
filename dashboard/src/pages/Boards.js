@@ -1,5 +1,9 @@
 import React from 'react';
 import axios from 'axios';
+import Card from 'react-bootstrap/Card'
+import CardDeck from 'react-bootstrap/CardDeck'
+import ListGroup from "react-bootstrap/ListGroup";
+import ListGroupItem from "react-bootstrap/ListGroupItem";
 
 export default class Boards extends React.Component {
     state = {
@@ -15,50 +19,47 @@ export default class Boards extends React.Component {
             })
     }
 
+    handleSubmit(id) {
+        console.log(id);
+    }
+
     render() {
         let data = this.state.device;
         console.log(data);
+        const blueStatus = ["on", "dry", "closed"];
         return (
-            <div>
-                {data.map(s => (
-                    //if s.label is the thing I want
-                    <div className="card-deck" key={s.deviceId}>
-                        <div className="card p-2">
-                            <h4 className="card-title">{s.label}</h4>
-                            <h6 className="card-text">{s.deviceId}</h6>
+            <>
+                <CardDeck>
+                    {data.map(s => (
+                        <Card style={{minWidth: '18rem', maxWidth: '18rem'}}>
+                            <Card.Body>
+                                <Card.Title>{s.label}</Card.Title>
+                            </Card.Body>
                             {
-                                s.capabilities.map((v) => {
-                                        return (
-                                            <h6 className="card-text">
-                                                {Object.keys(v)[0]}:{Object.values(v)[0]}
-                                            </h6>
-                                        );
-
-                                    }
-                                )
+                                s.capabilities.map(v => {
+                                    return (
+                                        <ListGroup className="list-group-flush">
+                                            <ListGroupItem variant={blueStatus.includes(Object.values(v)[0])  ? 'primary' : 'danger'}
+                                                           action={true}
+                                            onClick={()=>this.handleSubmit(Object.values(v)[0])}>
+                                                {Object.keys(v)[0]}: {Object.values(v)[0]}
+                                            </ListGroupItem>
+                                        </ListGroup>
+                                    )
+                                })
                             }
-                        </div>
 
-                    </div>
-                ))}
-            </div>
+                        </Card>
+                    ))}
+                </CardDeck>
+            </>
 
 
         );
 
     }
 
-    //
-    // renderCard(s) {
-    //     return <div class="card p-2">
-    //
-    //
-    //         <h6 className="card-text">{
-    //             s.capabilities
-    //         }</h6>
-    //
-    //     </div>;
-    // }
+
 }
 
 //
