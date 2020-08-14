@@ -26,8 +26,8 @@ public class SmartthingController {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-
-            String resStr = json.constructJson(response.body().string());
+            String preString = response.body().string();
+            String resStr = json.constructJson(preString);
             System.out.println(resStr);
             return resStr;
         }
