@@ -15,10 +15,10 @@ import java.io.IOException;
 @RequestMapping(path = "/GetData")
 public class SmartthingController {
     OkHttpClient client = new OkHttpClient();
-
+    JsonGenerator json = new JsonGenerator();
     @GetMapping(path = "/GetAllDevices")
     public String getAllDevices() throws IOException {
-        JsonGenerator json = new JsonGenerator();
+
         Request request = new Request.Builder()
                 .url("https://api.smartthings.com/v1/devices")
                 .method("GET", null)
@@ -28,7 +28,7 @@ public class SmartthingController {
         try (Response response = client.newCall(request).execute()) {
             String preString = response.body().string();
             String resStr = json.constructJson(preString);
-            System.out.println(resStr);
+            //System.out.println(resStr);
             return resStr;
         }
     }
