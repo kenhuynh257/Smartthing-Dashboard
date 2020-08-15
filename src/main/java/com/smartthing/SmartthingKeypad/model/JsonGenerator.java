@@ -97,8 +97,9 @@ public class JsonGenerator {
             //end json
 
             json.put(trimDevice);
-            System.out.println("FinalJson: " + json);
+
         }
+        System.out.println("FinalJson: " + json.toString(4));
         return json.toString();
 
     }
