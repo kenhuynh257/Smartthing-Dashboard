@@ -91,7 +91,15 @@ public class JsonGenerator {
 
                 //add label name
                 trimDevice.put("label", device.getString("label"));
-                System.out.println("TrimDevice: " + trimDevice);
+                //System.out.println("TrimDevice: " + trimDevice);
+
+                //add room
+                try{
+                    trimDevice.put("room", getRoom(device.getString("roomId"),device.getString("locationId")));
+                }catch(Exception e){
+                    trimDevice.put("room","");
+                }
+
             }
 
             //end json
@@ -125,6 +133,28 @@ public class JsonGenerator {
             statusCapability.put(capabilityID, res.getJSONObject(lookUpTable(capabilityID)).getString("value"));
 
             return statusCapability;
+        }
+
+    }
+
+    private String getRoom (String roomID, String locationID) throws IOException{
+        if(Room.room.containsKey(roomID)){
+            return Room.room.get(roomID);
+        }
+        String url = "https://api.smartthings.com/v1/locations/" +
+                locationID +
+                "/rooms/" +
+                roomID;
+        Request request = new Request.Builder()
+                .url(url)
+                .method("GET", null)
+                .addHeader("Authorization", RemoteKey.key)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            JSONObject res = new JSONObject(response.body().string());
+            String roomName = res.getString("name");
+            Room.room.put(roomID,roomName);
+            return roomName;
         }
 
     }
