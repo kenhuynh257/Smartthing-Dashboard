@@ -97,7 +97,7 @@ public class JsonGenerator {
                 try{
                     trimDevice.put("room", getRoom(device.getString("roomId"),device.getString("locationId")));
                 }catch(Exception e){
-                    trimDevice.put("room","");
+                    trimDevice.put("room","NoAssignRoom");
                 }
 
             }
