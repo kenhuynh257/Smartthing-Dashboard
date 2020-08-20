@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 
 /*
@@ -92,16 +93,15 @@ public class JsonGenerator {
                 //System.out.println("TrimDevice: " + trimDevice);
 
                 //add room
-                try{
-                    trimDevice.put("room", getRoom(device.getString("roomId"),device.getString("locationId")));
-                }catch(Exception e){
-                    trimDevice.put("room","NoAssignRoom");
+                try {
+                    trimDevice.put("room", getRoom(device.getString("roomId"), device.getString("locationId")));
+                } catch (Exception e) {
+                    trimDevice.put("room", "NoAssignRoom");
                 }
 
             }
 
             //end json
-
             json.put(trimDevice);
 
         }
@@ -125,7 +125,7 @@ public class JsonGenerator {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            JSONObject res = new JSONObject(response.body().string());
+            JSONObject res = new JSONObject(Objects.requireNonNull(response.body()).string());
 
             JSONObject statusCapability = new JSONObject();
             //System.out.println(res);
@@ -136,8 +136,8 @@ public class JsonGenerator {
 
     }
 
-    private String getRoom (String roomID, String locationID) throws IOException{
-        if(Room.room.containsKey(roomID)){
+    private String getRoom(String roomID, String locationID) throws IOException {
+        if (Room.room.containsKey(roomID)) {
             return Room.room.get(roomID);
         }
         String url = "https://api.smartthings.com/v1/locations/" +
@@ -150,9 +150,9 @@ public class JsonGenerator {
                 .addHeader("Authorization", RemoteKey.key)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            JSONObject res = new JSONObject(response.body().string());
+            JSONObject res = new JSONObject(Objects.requireNonNull(response.body()).string());
             String roomName = res.getString("name");
-            Room.room.put(roomID,roomName);
+            Room.room.put(roomID, roomName);
             return roomName;
         }
 
