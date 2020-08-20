@@ -1,7 +1,7 @@
 package com.smartthing.SmartthingKeypad.rest_controller;
 
 import com.smartthing.SmartthingKeypad.model.JsonGenerator;
-import com.smartthing.SmartthingKeypad.model.RemoteKey;
+import com.smartthing.SmartthingKeypad.data.RemoteKey;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -16,6 +16,7 @@ import java.io.IOException;
 public class SmartthingController {
     OkHttpClient client = new OkHttpClient();
     JsonGenerator json = new JsonGenerator();
+
     @GetMapping(path = "/GetAllDevices")
     public String getAllDevices() throws IOException {
 
@@ -32,6 +33,12 @@ public class SmartthingController {
             return resStr;
         }
     }
+
+//    @GetMapping(path = "/SendCommand/{id}")
+//    public @ResponseBody
+//    ResponseEntity<String> sendCommand() throws IOException{
+//
+//    }
 
 
 }

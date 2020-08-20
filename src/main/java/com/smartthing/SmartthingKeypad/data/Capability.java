@@ -1,4 +1,4 @@
-package com.smartthing.SmartthingKeypad.model;
+package com.smartthing.SmartthingKeypad.data;
 
 public enum Capability {
     SWITCH,

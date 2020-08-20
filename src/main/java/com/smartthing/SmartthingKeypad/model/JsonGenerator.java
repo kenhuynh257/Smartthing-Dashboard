@@ -1,5 +1,8 @@
 package com.smartthing.SmartthingKeypad.model;
 
+import com.smartthing.SmartthingKeypad.data.Capability;
+import com.smartthing.SmartthingKeypad.data.RemoteKey;
+import com.smartthing.SmartthingKeypad.data.Room;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -15,9 +18,7 @@ Generate json
 public class JsonGenerator {
     private final OkHttpClient client;
 
-
     public JsonGenerator() {
-
         client = new OkHttpClient();
     }
 
@@ -31,7 +32,6 @@ public class JsonGenerator {
     }
 
     private String lookUpTable(String text) {
-
         switch (Capability.valueOf(text.toUpperCase())) {
             case WATERSENSOR:
                 return "water";
@@ -108,6 +108,7 @@ public class JsonGenerator {
 
         }
         System.out.println("FinalJson: " + json.toString(4));
+
         return json.toString();
 
     }

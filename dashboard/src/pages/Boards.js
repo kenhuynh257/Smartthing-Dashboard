@@ -9,15 +9,15 @@ import ListGroupItem from "react-bootstrap/ListGroupItem";
 
 export default class Boards extends React.Component {
     state = {
-        device: []
+        device: [],
+        blueStatus : ["on", "dry", "closed"]
+
     }
 
     componentDidMount() {
         axios.get('/GetData/GetAllDevices')
             .then(res => {
-                console.log("res " + JSON.stringify(res.data));
                 this.setState({device: res.data});
-
             })
     }
 
@@ -25,18 +25,10 @@ export default class Boards extends React.Component {
         console.log(id);
     }
 
-
-
-
     render() {
         let data = this.state.device;
-
         console.log("data " + JSON.stringify(data));
 
-
-
-        console.log( data);
-        const blueStatus = ["on", "dry", "closed"];
         return (
             <Container>
                 <>
@@ -51,9 +43,11 @@ export default class Boards extends React.Component {
                                     s.capabilities.map(v => {
                                         return (
                                             <ListGroup className="list-group-flush">
-                                                <ListGroupItem variant={blueStatus.includes(Object.values(v)[0])  ? 'primary' : 'danger'}
-                                                               action={true}
-                                                               onClick={()=>this.handleSubmit(Object.values(v)[0])}>
+                                                <ListGroupItem
+                                                    variant={this.state.blueStatus.includes(Object.values(v)[0]) ? 'primary' : 'danger'}
+                                                    action={true}
+                                                    onClick={() => this.handleSubmit(Object.values(v)[0])}>
+
                                                     {Object.keys(v)[0]}: {Object.values(v)[0]}
                                                 </ListGroupItem>
                                             </ListGroup>
@@ -65,13 +59,8 @@ export default class Boards extends React.Component {
 
                         ))}
                     </CardDeck>
-
-
                 </>
-
             </Container>
-
-
         );
     }
 }
