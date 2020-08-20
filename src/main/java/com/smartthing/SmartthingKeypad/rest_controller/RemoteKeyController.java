@@ -1,7 +1,7 @@
 package com.smartthing.SmartthingKeypad.rest_controller;
 
 
-import com.smartthing.SmartthingKeypad.data.RemoteKey;
+import com.smartthing.SmartthingKeypad.model.RemoteKey;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

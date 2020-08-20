@@ -1,8 +1,6 @@
 package com.smartthing.SmartthingKeypad.model;
 
 import com.smartthing.SmartthingKeypad.data.Capability;
-import com.smartthing.SmartthingKeypad.data.RemoteKey;
-import com.smartthing.SmartthingKeypad.data.Room;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

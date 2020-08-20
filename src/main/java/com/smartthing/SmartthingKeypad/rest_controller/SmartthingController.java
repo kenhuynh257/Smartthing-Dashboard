@@ -1,7 +1,7 @@
 package com.smartthing.SmartthingKeypad.rest_controller;
 
 import com.smartthing.SmartthingKeypad.model.JsonGenerator;
-import com.smartthing.SmartthingKeypad.data.RemoteKey;
+import com.smartthing.SmartthingKeypad.model.RemoteKey;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

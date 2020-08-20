@@ -1,4 +1,4 @@
-package com.smartthing.SmartthingKeypad.data;
+package com.smartthing.SmartthingKeypad.model;
 
 import java.util.HashMap;
 

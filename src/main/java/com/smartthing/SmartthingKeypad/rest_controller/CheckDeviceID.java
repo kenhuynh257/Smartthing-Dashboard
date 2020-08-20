@@ -1,6 +1,6 @@
 package com.smartthing.SmartthingKeypad.rest_controller;
 
-import com.smartthing.SmartthingKeypad.data.SHMDevices;
+import com.smartthing.SmartthingKeypad.model.SHMDevices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
