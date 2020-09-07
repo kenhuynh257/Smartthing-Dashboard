@@ -8,14 +8,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/CheckDeviceID")
 public class CheckDeviceID {
+    SHMDevices device = new SHMDevices();
 
     @GetMapping(path = "/{id}")
     public @ResponseBody
     ResponseEntity<String>
-    isSHMDevice(@PathVariable String id){
-        if(SHMDevices.isSHMDevices(id)){
-            return new ResponseEntity<String>("ok", HttpStatus.ACCEPTED);
+    isSHMDevice(@PathVariable String id) {
+        if (device.isSHMDevices(id)) {
+            return new ResponseEntity<String>("notDisarm", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Not support", HttpStatus.NOT_ACCEPTABLE);
+        if (device.isDisarmButton(id)) {
+            return new ResponseEntity<>("disarm", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Not support", HttpStatus.OK);
     }
 }

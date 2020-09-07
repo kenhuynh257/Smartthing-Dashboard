@@ -2,7 +2,6 @@ package com.smartthing.SmartthingKeypad.rest_controller;
 
 import com.smartthing.SmartthingKeypad.model.PasswordCode;
 import com.smartthing.SmartthingKeypad.model.RemoteKey;
-import com.smartthing.SmartthingKeypad.model.SwitchStatus;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,12 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "/passsword")
 public class CheckPassword {
-    SwitchStatus changeStatus = new SwitchStatus();
+
     OkHttpClient client = new OkHttpClient();
 
 
@@ -56,12 +54,13 @@ public class CheckPassword {
 
         temp.put("component", "main");
         temp.put("capability", capability);
-        temp.put("command", changeStatus.changeStatus(status));
+        temp.put("command", "on");
         temp.put("arguments", new JSONArray());
 
         body.put(temp);
 
         res.put("commands", body);
+        System.out.println("command body: " + res.toString());
         return res;
     }
 }
