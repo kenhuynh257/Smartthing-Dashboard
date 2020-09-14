@@ -12,7 +12,8 @@ import Form from "react-bootstrap/Form";
 export default class Boards extends React.Component {
     state = {
         device: [],
-        blueStatus: ["on", "dry", "closed"]
+        blueStatus: ["on", "dry", "closed"],
+        isOpen: false,
 
     }
 
@@ -24,25 +25,6 @@ export default class Boards extends React.Component {
             })
     }
 
-    RenderModal() {
-
-        return (
-            <>
-                <Modal show={true}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Password</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form onSubmit={this.handlePassword}>
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="number"/>
-                        </Form>
-                    </Modal.Body>
-
-                </Modal>
-            </>
-        );
-    }
 
     handlePassword(pass) {
         console.log(pass);
@@ -54,7 +36,7 @@ export default class Boards extends React.Component {
         axios.get(url)
             .then(r => {
                 if (r.data === "notDisarm") {
-                    this.RenderModal();
+                    this.setState({isOpen: true});
                 } else {
                     console.log(r.data);
                 }
@@ -100,6 +82,18 @@ export default class Boards extends React.Component {
 
                         ))}
                     </CardDeck>
+                    <Modal show={this.state.isOpen}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Password</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Form onSubmit={this.handlePassword}>
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control type="number"/>
+                            </Form>
+                        </Modal.Body>
+
+                    </Modal>
                 </>
             </Container>
         );
