@@ -14,6 +14,7 @@ export default class Boards extends React.Component {
         device: [],
         blueStatus: ["on", "dry", "closed"],
         isOpen: false,
+        pass:""
 
     }
 
@@ -25,10 +26,15 @@ export default class Boards extends React.Component {
             })
     }
 
-
-    handlePassword(pass) {
-        console.log(pass);
+    handleChange(event){
+        this.setState({pass:event.target.value});
     }
+    handlePassword(event) {
+        event.preventDefault();
+        console.log(this.state.pass);
+        this.setState({isOpen: false});
+    }
+
 
     handleSubmit(id) {
         let url = '/CheckDeviceID/' + id;
@@ -50,14 +56,14 @@ export default class Boards extends React.Component {
     render() {
         let data = this.state.device;
         console.log("data " + JSON.stringify(data));
-
+        //console.log("pass"+this.state.pass)
         return (
             <Container>
                 <>
                     <CardDeck>
                         {data.map(s => (
 
-                            <Card style={{minWidth: '18rem', maxWidth: '18rem'}}>
+                            <Card style={{minWidth: '18rem', maxWidth: '18rem'}} key={s.deviceId}>
                                 <Card.Body>
                                     <Card.Title>{s.label}</Card.Title>
                                 </Card.Body>
@@ -77,23 +83,23 @@ export default class Boards extends React.Component {
                                         )
                                     })
                                 }
+                                <Modal show={this.state.isOpen}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Password</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Form onSubmit={this.handlePassword.bind(this)}>
+                                            <Form.Label>Password</Form.Label>
+                                            <Form.Control type="text" onChange={this.handleChange.bind(this)}/>
+                                        </Form>
+                                    </Modal.Body>
 
+                                </Modal>
                             </Card>
 
                         ))}
                     </CardDeck>
-                    <Modal show={this.state.isOpen}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Password</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <Form onSubmit={this.handlePassword}>
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control type="number"/>
-                            </Form>
-                        </Modal.Body>
 
-                    </Modal>
                 </>
             </Container>
         );
