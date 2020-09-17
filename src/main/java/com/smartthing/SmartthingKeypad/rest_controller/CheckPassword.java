@@ -2,15 +2,15 @@ package com.smartthing.SmartthingKeypad.rest_controller;
 
 import com.smartthing.SmartthingKeypad.model.PasswordCode;
 import com.smartthing.SmartthingKeypad.model.RemoteKey;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -21,14 +21,13 @@ public class CheckPassword {
     OkHttpClient client = new OkHttpClient();
 
 
-    @GetMapping(path = "/")
-    public @ResponseBody
-    ResponseEntity<String> authorize(String password, String deviceID, String capability, String status) throws IOException, NullPointerException {
+    @PostMapping(path = "/")
+    public ResponseEntity<String> authorize(@RequestBody String password, @RequestBody String deviceID, @RequestBody String capability, @RequestBody String status) throws IOException, NullPointerException {
         if (password.equals(PasswordCode.password)) {
 
             JSONObject JSONBody = commandBody(capability, status);
             MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(JSONBody.toString(), mediaType);
+            okhttp3.RequestBody body = okhttp3.RequestBody.create(JSONBody.toString(), mediaType);
 
             String url = "https://api.smartthings.com/v1/devices/" + deviceID + "/commands";
             Request request = new Request.Builder()
