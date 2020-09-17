@@ -14,7 +14,7 @@ export default class Boards extends React.Component {
         device: [],
         blueStatus: ["on", "dry", "closed"],
         isOpen: false,
-        pass:""
+        pass: ""
 
     }
 
@@ -26,12 +26,20 @@ export default class Boards extends React.Component {
             })
     }
 
-    handleChange(event){
-        this.setState({pass:event.target.value});
+    handleChange(event) {
+        this.setState({pass: event.target.value});
     }
-    handlePassword(event) {
+
+    handlePassword(deviceID, capability, status, event) {
         event.preventDefault();
-        console.log(this.state.pass);
+        let pass = this.state.pass;
+        console.log(pass, deviceID, capability, status);
+        axios.post('/passsword/', {pass, deviceID, capability, status})
+            .then(r => {
+                console.log('response: ', r)
+            }, (er) => {
+                console.log(er);
+            })
         this.setState({isOpen: false});
     }
 
@@ -70,31 +78,37 @@ export default class Boards extends React.Component {
                                 {
                                     s.capabilities.map(v => {
                                         return (
-                                            <ListGroup className="list-group-flush">
-                                                <ListGroupItem
-                                                    variant={this.state.blueStatus.includes(Object.values(v)[0]) ? 'primary' : 'danger'}
-                                                    action={true}
-                                                    onClick={() => this.handleSubmit(s.deviceId)}>
+                                            <>
+                                                <ListGroup className="list-group-flush">
+                                                    <ListGroupItem
+                                                        variant={this.state.blueStatus.includes(Object.values(v)[0]) ? 'primary' : 'danger'}
+                                                        action={true}
+                                                        onClick={() => this.handleSubmit(s.deviceId)}>
 
-                                                    {/*capacity:status*/}
-                                                    {Object.keys(v)[0]}: {Object.values(v)[0]}
-                                                </ListGroupItem>
-                                            </ListGroup>
+                                                        {/*capacity:status*/}
+                                                        {Object.keys(v)[0]}: {Object.values(v)[0]}
+                                                    </ListGroupItem>
+                                                </ListGroup>
+
+                                                <Modal show={this.state.isOpen}>
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title>Password</Modal.Title>
+                                                    </Modal.Header>
+                                                    <Modal.Body>
+                                                        <Form
+                                                            onSubmit={this.handlePassword.bind(this, s.deviceId, Object.keys(v)[0], Object.values(v)[0])}>
+                                                            <Form.Label>Password</Form.Label>
+                                                            <Form.Control type="text"
+                                                                          onChange={this.handleChange.bind(this)}/>
+                                                        </Form>
+                                                    </Modal.Body>
+
+                                                </Modal>
+                                            </>
                                         )
                                     })
                                 }
-                                <Modal show={this.state.isOpen}>
-                                    <Modal.Header closeButton>
-                                        <Modal.Title>Password</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        <Form onSubmit={this.handlePassword.bind(this)}>
-                                            <Form.Label>Password</Form.Label>
-                                            <Form.Control type="text" onChange={this.handleChange.bind(this)}/>
-                                        </Form>
-                                    </Modal.Body>
 
-                                </Modal>
                             </Card>
 
                         ))}
