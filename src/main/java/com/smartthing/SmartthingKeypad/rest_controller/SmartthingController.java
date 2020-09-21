@@ -34,11 +34,4 @@ public class SmartthingController {
         }
     }
 
-//    @GetMapping(path = "/SendCommand/{id}")
-//    public @ResponseBody
-//    ResponseEntity<String> sendCommand() throws IOException{
-//
-//    }
-
-
 }

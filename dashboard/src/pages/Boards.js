@@ -34,7 +34,7 @@ export default class Boards extends React.Component {
         event.preventDefault();
         let pass = this.state.pass;
         console.log(pass, deviceID, capability, status);
-        axios.post('/passsword/', {pass, deviceID, capability, status})
+        axios.post('/SendCommnad/Disarm', [pass, deviceID, capability, status])
             .then(r => {
                 console.log('response: ', r)
             }, (er) => {
@@ -44,17 +44,21 @@ export default class Boards extends React.Component {
     }
 
 
-    handleSubmit(id) {
-        let url = '/CheckDeviceID/' + id;
-        console.log(id);
+    handleSubmit(deviceID, capability, status) {
+        let url = '/CheckDeviceID/' + deviceID;
+        console.log(deviceID);
         axios.get(url)
             .then(r => {
-                if (r.data === "notDisarm") {
+                if (r.data === "disarm") {
                     this.setState({isOpen: true});
                 } else {
-                    console.log(r.data);
+                    axios.post('/SendCommnad/Arm', [deviceID, capability, status])
+                        .then(r => {
+                            console.log('response: ', r)
+                        }, (er) => {
+                            console.log(er);
+                        })
                 }
-
 
             }, (er) => {
                 console.log(er);
@@ -83,7 +87,7 @@ export default class Boards extends React.Component {
                                                     <ListGroupItem
                                                         variant={this.state.blueStatus.includes(Object.values(v)[0]) ? 'primary' : 'danger'}
                                                         action={true}
-                                                        onClick={() => this.handleSubmit(s.deviceId)}>
+                                                        onClick={() => this.handleSubmit(s.deviceId,Object.keys(v)[0],Object.values(v)[0])}>
 
                                                         {/*capacity:status*/}
                                                         {Object.keys(v)[0]}: {Object.values(v)[0]}

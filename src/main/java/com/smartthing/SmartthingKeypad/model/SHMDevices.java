@@ -7,8 +7,8 @@ import java.util.Arrays;
 
 public class SHMDevices {
     @Getter
-    private final String[] deviceID = {"04c5d925-ab57-47e6-bd28-77fede884636"};
-    private final String disarmID = "04c5d925-ab57-47e6-bd28-77fede884636";
+    private final String[] deviceID = {"fa3a4770-7dad-4110-a7e7-d58caadb9550","e4c6c14d-c4ad-4a0a-aece-fd60e0f59c33"};
+    private final String disarmID = "0ec972d8-287b-4188-92ac-44da1fd396ad";
 
     public boolean isSHMDevices(@NotNull String id) {
         if (Arrays.stream(deviceID).anyMatch(id::equals)) {
