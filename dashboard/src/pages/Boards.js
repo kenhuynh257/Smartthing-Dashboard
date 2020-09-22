@@ -14,7 +14,9 @@ export default class Boards extends React.Component {
         device: [],
         blueStatus: ["on", "dry", "closed"],
         isOpen: false,
-        pass: ""
+        pass: "",
+        disarmID: "",
+        disarmStatus: ""
 
     }
 
@@ -30,40 +32,51 @@ export default class Boards extends React.Component {
         this.setState({pass: event.target.value});
     }
 
-    handlePassword(deviceID, capability, status, event) {
+    async handlePassword(event) {
         event.preventDefault();
         let pass = this.state.pass;
-        console.log(pass, deviceID, capability, status);
-        axios.post('/SendCommnad/Disarm', [pass, deviceID, capability, status])
+
+        await axios.post('/SendCommand/Disarm', [pass, this.state.disarmID, "switch", this.state.disarmStatus])
             .then(r => {
                 console.log('response: ', r)
             }, (er) => {
                 console.log(er);
             })
         this.setState({isOpen: false});
+
+        //setTimeout(window.location.reload(), 3000);
     }
 
 
-    handleSubmit(deviceID, capability, status) {
+    async handleSubmit(deviceID, capability, status) {
         let url = '/CheckDeviceID/' + deviceID;
         console.log(deviceID);
-        axios.get(url)
+
+        await axios.get(url)
             .then(r => {
                 if (r.data === "disarm") {
-                    this.setState({isOpen: true});
+                    this.setState({isOpen: true, disarmID: deviceID, disarmStatus: status});
+
                 } else {
-                    axios.post('/SendCommnad/Arm', [deviceID, capability, status])
+
+                    axios.post('/SendCommand/Arm', [deviceID, capability, status])
                         .then(r => {
                             console.log('response: ', r)
                         }, (er) => {
                             console.log(er);
-                        })
+                        });
+                    window.location.reload();
                 }
+
+
 
             }, (er) => {
                 console.log(er);
             });
+        //setTimeout(window.location.reload(), 3000);
+
     }
+
 
     render() {
         let data = this.state.device;
@@ -87,27 +100,14 @@ export default class Boards extends React.Component {
                                                     <ListGroupItem
                                                         variant={this.state.blueStatus.includes(Object.values(v)[0]) ? 'primary' : 'danger'}
                                                         action={true}
-                                                        onClick={() => this.handleSubmit(s.deviceId,Object.keys(v)[0],Object.values(v)[0])}>
+                                                        onClick={() => this.handleSubmit(s.deviceId, Object.keys(v)[0], Object.values(v)[0])}>
 
                                                         {/*capacity:status*/}
                                                         {Object.keys(v)[0]}: {Object.values(v)[0]}
                                                     </ListGroupItem>
                                                 </ListGroup>
 
-                                                <Modal show={this.state.isOpen}>
-                                                    <Modal.Header closeButton>
-                                                        <Modal.Title>Password</Modal.Title>
-                                                    </Modal.Header>
-                                                    <Modal.Body>
-                                                        <Form
-                                                            onSubmit={this.handlePassword.bind(this, s.deviceId, Object.keys(v)[0], Object.values(v)[0])}>
-                                                            <Form.Label>Password</Form.Label>
-                                                            <Form.Control type="text"
-                                                                          onChange={this.handleChange.bind(this)}/>
-                                                        </Form>
-                                                    </Modal.Body>
 
-                                                </Modal>
                                             </>
                                         )
                                     })
@@ -117,7 +117,20 @@ export default class Boards extends React.Component {
 
                         ))}
                     </CardDeck>
+                    <Modal show={this.state.isOpen}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Password</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Form
+                                onSubmit={this.handlePassword.bind(this)}>
+                                <Form.Label>Enter Password</Form.Label>
+                                <Form.Control type="text"
+                                              onChange={this.handleChange.bind(this)}/>
+                            </Form>
+                        </Modal.Body>
 
+                    </Modal>
                 </>
             </Container>
         );
