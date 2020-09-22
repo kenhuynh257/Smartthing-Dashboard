@@ -13,17 +13,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping(path = "/SendCommnad")
+@RequestMapping(path = "/SendCommand")
 public class SendCommand {
 
 
     @PostMapping(path = "/Disarm")
     @ResponseBody
-    public ResponseEntity<String> authorize(@RequestBody String[] infoArray) throws IOException, NullPointerException {
+    public ResponseEntity<String> authorize(@RequestBody String[] infoArray) throws IOException, NullPointerException, InterruptedException {
         String status = infoArray[3];
-        if (status == "on") {
+        if (status.equals("on") ) {
             return new ResponseEntity<>("Cant do that", HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -40,9 +41,9 @@ public class SendCommand {
 
     @PostMapping(path = "/Arm")
     @ResponseBody
-    public ResponseEntity<String> armSystem(@RequestBody String[] infoArray) throws IOException, NullPointerException {
+    public ResponseEntity<String> armSystem(@RequestBody String[] infoArray) throws IOException, NullPointerException, InterruptedException {
         String status = infoArray[2];
-        if (status == "on") {
+        if (status.equals("on")) {
             return new ResponseEntity<>("Cant do that", HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -52,7 +53,7 @@ public class SendCommand {
 
     }
 
-    private ResponseEntity<String> sendCommand(String deviceID, String capability, String status) throws IOException {
+    private ResponseEntity<String> sendCommand(String deviceID, String capability, String status) throws IOException, InterruptedException {
         OkHttpClient client = new OkHttpClient();
 
         JSONObject JSONBody = commandBody(capability, "on");
@@ -61,6 +62,7 @@ public class SendCommand {
         okhttp3.RequestBody body = okhttp3.RequestBody.create(JSONBody.toString(), mediaType);
 
         String url = "https://api.smartthings.com/v1/devices/" + deviceID + "/commands";
+        System.out.println("url: " + url);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -70,6 +72,7 @@ public class SendCommand {
         try (Response response = client.newCall(request).execute()) {
             String res = response.body().string();
             System.out.println("Command Return: " + res);
+            TimeUnit.SECONDS.sleep(1);
             return new ResponseEntity<>(res, HttpStatus.OK);
         }
     }
