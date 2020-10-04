@@ -69,7 +69,6 @@ export default class Boards extends React.Component {
                 }
 
 
-
             }, (er) => {
                 console.log(er);
             });
@@ -82,9 +81,14 @@ export default class Boards extends React.Component {
         let data = this.state.device;
         console.log("data " + JSON.stringify(data));
         //console.log("pass"+this.state.pass)
+        // let reData = this.state.device.reduce((r,a)=>{
+        //     r[a.room] = [...r[a.room]||[],a];
+        //     return r;
+        // },{})
         return (
             <Container>
                 <>
+
                     <CardDeck>
                         {data.map(s => (
 
@@ -107,16 +111,14 @@ export default class Boards extends React.Component {
                                                     </ListGroupItem>
                                                 </ListGroup>
 
-
                                             </>
                                         )
                                     })
                                 }
-
                             </Card>
-
                         ))}
                     </CardDeck>
+
                     <Modal show={this.state.isOpen}>
                         <Modal.Header closeButton>
                             <Modal.Title>Password</Modal.Title>
@@ -131,6 +133,7 @@ export default class Boards extends React.Component {
                         </Modal.Body>
 
                     </Modal>
+
                 </>
             </Container>
         );

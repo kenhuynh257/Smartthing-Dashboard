@@ -63,7 +63,6 @@ public class JsonGenerator {
 
             for (int z = 0; z < componentArray.length(); z++) {
                 JSONObject capabilityObj = componentArray.getJSONObject(z);
-                System.out.println(capabilityObj);
 
                 JSONArray capabilityArray = capabilityObj.getJSONArray("capabilities");
                 //status capability Array
@@ -75,7 +74,7 @@ public class JsonGenerator {
                     String capabilityName = capability.getString("id");
                     //System.out.println(capabilityName.toUpperCase());
                     if (containsCapabilityEnum(capabilityName)) {
-                        System.out.println("capacityName: " + capabilityName);
+                        //System.out.println("capacityName: " + capabilityName);
                         JSONObject statusCapability = getCapabilityStatus(deviceID, capabilityName);
                         statusCapabilityArray.put(statusCapability);
                     }
