@@ -5,11 +5,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller check if the device need password to change status
+ */
 @RestController
 @RequestMapping(path = "/CheckDeviceID")
 public class CheckDeviceID {
     SHMDevices device = new SHMDevices();
 
+    /**
+     * Check if this is a SHM Device
+     * @param id: id
+     * @return: ok status with information body
+     */
     @GetMapping(path = "/{id}")
     public @ResponseBody
     ResponseEntity<String>
