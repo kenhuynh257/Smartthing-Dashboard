@@ -15,11 +15,21 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Controller that send command for button device
+ */
 @RestController
 @RequestMapping(path = "/SendCommand")
-public class SendCommand {
+public class ButtonDevice {
 
-
+    /**
+     * Back end API for disarm
+     * @param infoArray Array information that contains a password
+     * @return http ok status and updated message
+     * @throws IOException
+     * @throws NullPointerException
+     * @throws InterruptedException
+     */
     @PostMapping(path = "/Disarm")
     @ResponseBody
     public ResponseEntity<String> authorize(@RequestBody String[] infoArray) throws IOException, NullPointerException, InterruptedException {
@@ -32,31 +42,53 @@ public class SendCommand {
         String capability = infoArray[2];
         String deviceID = infoArray[1];
         if (password.equals(PasswordCode.password)) {
-            return sendCommand(deviceID,capability,status);
+            return sendCommand(deviceID,capability,"on");
 
         }
 
         return new ResponseEntity<>("Wrong Password", HttpStatus.NOT_ACCEPTABLE);
     }
 
+    /**
+     *  Back end API for action that not require passcode
+     * @param infoArray Array information that doesnt contain a password
+     * @return http ok status and updated message
+     * @throws IOException
+     * @throws NullPointerException
+     * @throws InterruptedException
+     */
     @PostMapping(path = "/Arm")
     @ResponseBody
+
     public ResponseEntity<String> armSystem(@RequestBody String[] infoArray) throws IOException, NullPointerException, InterruptedException {
         String status = infoArray[2];
+        String changeStatus = status;
         if (status.equals("on")) {
-            return new ResponseEntity<>("Cant do that", HttpStatus.NOT_ACCEPTABLE);
+            //return new ResponseEntity<>("Cant do that", HttpStatus.NOT_ACCEPTABLE);
+            changeStatus = "off";
+        }else {
+            changeStatus ="on";
         }
 
         String deviceID = infoArray[0];
         String capability= infoArray[1];
-        return sendCommand(deviceID,capability,status);
+        return sendCommand(deviceID,capability,changeStatus);
 
     }
 
+    /**
+     * Send Command to Samsung API
+     * @param deviceID: ID
+     * @param capability: the capability of the device
+     * @param status: device's status
+     * @return http ok status and updated message
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private ResponseEntity<String> sendCommand(String deviceID, String capability, String status) throws IOException, InterruptedException {
         OkHttpClient client = new OkHttpClient();
 
-        JSONObject JSONBody = commandBody(capability, "on");
+        JSONObject JSONBody = commandBody(capability, status);
 
         MediaType mediaType = MediaType.parse("application/json");
         okhttp3.RequestBody body = okhttp3.RequestBody.create(JSONBody.toString(), mediaType);
@@ -77,7 +109,13 @@ public class SendCommand {
         }
     }
 
+    /**
+     * Construct the body for the API
+     * @param capability: the capability of the device
+     * @param status: device's status
+     */
     private JSONObject commandBody(String capability, String status) {
+
         JSONObject res = new JSONObject();
         JSONArray body = new JSONArray();
         JSONObject temp = new JSONObject();

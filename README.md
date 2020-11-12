@@ -8,4 +8,8 @@ There are a lot of similar programs online but the reason I create this just to 
  ## License
  Samsung
  ## Project Status
- Almost done. Only need to comment inside the code.
+ Done Commenting code.
+ Fix bug
+ 
+ ## Bug
+ Status on the web is not updated even though it has correct status in the back end

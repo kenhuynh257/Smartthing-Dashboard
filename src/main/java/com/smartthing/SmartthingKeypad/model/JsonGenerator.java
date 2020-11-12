@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 
-/*
-Generate json
+/**
+ * Generate the json for the wanted information of a device
  */
 public class JsonGenerator {
     private final OkHttpClient client;
@@ -21,6 +21,11 @@ public class JsonGenerator {
         client = new OkHttpClient();
     }
 
+    /**
+     * Check if the string is the wanted capability
+     * @param text capability
+     * @return True if the capability is in enum
+     */
     private static boolean containsCapabilityEnum(String text) {
         for (Capability c : Capability.values()) {
             if (c.name().equals(text.toUpperCase())) {
@@ -30,7 +35,13 @@ public class JsonGenerator {
         return false;
     }
 
+    /**
+     * capability in the GET API device is different from the GET API capability so we need to change the name
+     * @param text capability
+     * @return correct capability
+     */
     private String lookUpTable(String text) {
+
         switch (Capability.valueOf(text.toUpperCase())) {
             case WATERSENSOR:
                 return "water";
@@ -41,6 +52,12 @@ public class JsonGenerator {
         }
     }
 
+    /**
+     * Customize json
+     * @param input json input
+     * @return customized json
+     * @throws IOException
+     */
     public String constructJson(String input) throws IOException {
         JSONArray json = new JSONArray();
 
@@ -110,6 +127,13 @@ public class JsonGenerator {
 
     }
 
+    /**
+     * Send API request to get the status capability of a device
+     * @param deviceID: id
+     * @param capabilityID:
+     * @return: status
+     * @throws IOException
+     */
     private JSONObject getCapabilityStatus(String deviceID, String capabilityID) throws IOException {
         String url = "https://api.smartthings.com/v1/devices/"
                 + deviceID
@@ -135,6 +159,13 @@ public class JsonGenerator {
 
     }
 
+    /**
+     * API request to get room name of a device
+     * @param roomID
+     * @param locationID
+     * @return room name
+     * @throws IOException
+     */
     private String getRoom(String roomID, String locationID) throws IOException {
         if (Room.room.containsKey(roomID)) {
             return Room.room.get(roomID);
